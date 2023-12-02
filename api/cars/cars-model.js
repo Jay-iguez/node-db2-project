@@ -9,8 +9,10 @@ const getById = async (id) => {
   return result
 }
 
-const create = () => {
-  // DO YOUR MAGIC
+const create = async (data) => {
+  const [id] = await db('cars').insert(data)
+  const result = await getById(id)
+  return result
 }
 
 const create_error = (status, msg) => {
@@ -19,9 +21,27 @@ const create_error = (status, msg) => {
   return error
 }
 
+const check_undefined = (values) => {
+
+  for (let i = 0; i < values.length; i++){
+    let name_of_key
+    for ( let key in values[i]){
+      name_of_key = key
+    } 
+    
+    if (!values[i][name_of_key]){
+      return {value: name_of_key}
+    }
+  }
+
+  return {value: undefined}
+
+}
+
 module.exports = {
   getAll,
   getById,
   create,
-  create_error
+  create_error,
+  check_undefined
 }
